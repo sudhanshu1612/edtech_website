@@ -248,9 +248,33 @@ exports.signUp = async (req , res) =>
         }
         catch(error)
         {
-
+           console.log(error);
+           return res.status(500).json(
+            {
+               success: false,
+               message: 'Login Failure , please try agian',
+            });
         }
-    }
+    };
 
 
 //change password
+exports.changePassword = async (req ,res) => 
+{
+   //get data from req body
+    const {oldPassword , newPassword , confirmNewPassword} = req.body;
+   //get oldpassword , new password , confirm new password
+   if( !oldPassword || !newPassword || !confirmNewPassword)
+   {
+    return res.status(403).json(
+        {
+            success:false,
+            message:'All fields are required',
+        })
+   }
+   //validation
+   
+   //upadate password in the data base
+   //send mail - password upadated 
+   //return response
+}

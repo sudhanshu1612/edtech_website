@@ -1,3 +1,20 @@
+const jwt = require("jsonwebtoken");
+require("dotenv").config;
+const User = require("../models/User");
+
 //auth 
-//student
-//instructor
+exports.auth = async ( req , res , next) => 
+{
+    try
+    {
+       
+    }
+    catch (error)
+    {
+
+    }
+}
+//isstudent
+//isinstructor
+//isAdmin
+
