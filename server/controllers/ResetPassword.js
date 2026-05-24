@@ -52,4 +52,35 @@ exports.resetPasswordToken = async (req , res) =>
        })
    }
 }
+
 //reset password
+exports.resetPassword = async (req , res) => 
+{
+    //data fetch
+    const {password , confirmPassword , token} = req.body;
+    //validation
+    if(password !== confirmPassword)
+    {
+        return res.json({
+            success: false,
+            message:'Password not matching',
+        })
+    }
+    //get user details from token 
+    const userDetails = await User.findOne({token: token});
+    // if no entry available invalid token 
+    if(!userDetails) 
+    {
+        return res.json({
+            success: false,
+            message: ' invalid password entry',
+        })
+    }
+    //token time expired
+    if(userDetails.resetPasswordExpires < Date.now())
+    {
+        
+    }
+    //hash the password
+    //update the password
+}
