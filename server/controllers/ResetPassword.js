@@ -1,5 +1,6 @@
 const User = require("../models/USer");
 const mailSender = require("../utils/mailSender");
+const bcrypt = require("bcrypt");
 
 //reset password token
 exports.resetPasswordToken = async (req , res) => 
@@ -56,31 +57,56 @@ exports.resetPasswordToken = async (req , res) =>
 //reset password
 exports.resetPassword = async (req , res) => 
 {
-    //data fetch
-    const {password , confirmPassword , token} = req.body;
-    //validation
-    if(password !== confirmPassword)
+    try
     {
-        return res.json({
-            success: false,
-            message:'Password not matching',
+        //data fetch
+        const {password , confirmPassword , token} = req.body;
+        //validation
+        if(password !== confirmPassword)
+        {
+            return res.json({
+                success: false,
+                message:'Password not matching',
+            })
+        }
+        //get user details from token 
+        const userDetails = await User.findOne({token: token});
+        // if no entry available invalid token 
+        if(!userDetails) 
+        {
+            return res.json({
+                success: false,
+                message: ' invalid password entry',
+            })
+        }
+        //token time expired
+        if(userDetails.resetPasswordExpires < Date.now())
+        {
+            return res.json({
+                success: false,
+                message: 'Token is expired , please regenerate your token',
+            })
+        }
+        //hash the password
+        const hashedPassword = await bcrypt.hash(password , 10 );
+        //update the password
+        await user.findOneAndUpdate(
+                {token: token},
+                {password:hashedPassword},
+                {new:true},
+        )
+        //return res
+        return res.status(200).json({
+            success: true,
+            message: 'Password reset unsuccessful',
         })
     }
-    //get user details from token 
-    const userDetails = await User.findOne({token: token});
-    // if no entry available invalid token 
-    if(!userDetails) 
+    catch(error)
     {
-        return res.json({
+        console.log(error);
+        return res.status(500).json({
             success: false,
-            message: ' invalid password entry',
+            message: 'Something went wrong while sending reset pwd mail',
         })
     }
-    //token time expired
-    if(userDetails.resetPasswordExpires < Date.now())
-    {
-        
-    }
-    //hash the password
-    //update the password
 }
