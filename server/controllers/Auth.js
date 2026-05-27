@@ -28,7 +28,7 @@ require("dotenv").config();
         var OTP =  otpGenerator.generate(6, {
             upperCaseAlphabets: false,
             lowerCaseAlphabets:false,
-            specialChars:false,
+            specialChars:false, 
         })
         console.log("OTP generated : ",otp);
 
