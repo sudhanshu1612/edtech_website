@@ -78,13 +78,17 @@ try
             success: true,
             message: 'Course Created Successfully',
             data: newCourse,
-          })
-    )
+          }
+    );
 }
-catch(error)
-{
-
-}
+    catch(error)
+    {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    }
 };
 
 
