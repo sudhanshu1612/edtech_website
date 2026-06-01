@@ -93,5 +93,25 @@ try
 
 
 //getAllcourse handler function
+exports.getAllCourse = async (req , res) => {
+    try
+    {
+       const allCourses = await Course.find({});
 
+       return res.status(200).json({
+        success: true,
+        message: 'data for all courses retrived successfully',
+        data: allCourses,
+       })
+    }
+    catch(error)
+    {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: 'Cannot Fetch Course Details',
+        error: error.message,
+      })
+    }
+}
 
