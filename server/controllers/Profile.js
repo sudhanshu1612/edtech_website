@@ -42,3 +42,22 @@ exports.updateProfile = async(req , res) => {
         })
     }
 }
+
+
+//delete account
+exports.deleteAccount = async (req , res) => {
+    try
+    {
+        
+    }
+    catch(error)
+    {
+            return res.status(500).json({
+            success: false,
+            message:'unable to delete account please try agiain',
+            error: error.message,
+        });
+    }
+}
+
+ 
