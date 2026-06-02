@@ -90,6 +90,7 @@ exports.deleteSection = async (req , res) => {
                 message:'Section Id is required',
             });
         }
+        //todo: do we need to remove the section objectID from the course content array in course schema ? yes we need to do that
         //delete section
         await Section.findByIdAndDelete(sectionId);
         //return response
