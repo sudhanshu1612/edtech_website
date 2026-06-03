@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const {instance} = require("../config/razorpay");
 const Course  = require("../models/Course");
 const User = require("../models/User");
@@ -105,7 +106,70 @@ exports.verifySignature = async (req , res) => {
     try
     {
         const webhookSecret = "12345678";
+
         const signature = req.headers['x-razorpay-signature'];
+
+        const shasum = crypto.createHmac('sha256', webhookSecret);
+
+        shasum.update(JSON.stringify(req.body));
+
+        const digest = shasum.digest('hex');
+
+        if(signature === digest)
+        {
+            console.log('payment is authorised');
+
+            const {courseId, userId} = req.body.payload.payment.entity.notes;  
+
+            try
+            {
+               //fulfill the action
+               const enrolledCourse = await Course.findOneAndUpdate(
+                {_id: courseId},
+                {$push: {studentsEnrolled: userId}},
+                {new: true}
+               );
+               //enroll the student in the course
+               if(!enrolledCourse)
+               {
+                 return res.status(404).json({
+                    success: false,
+                    message: 'Course not found',
+                 });
+               }
+
+               console.log('Enrolled Course:', enrolledCourse);
+
+               //find the student and add student on the list of enrolled courses
+               const enrolledStudent  = await User.findOneAndUpdate(
+                {_id: userId},
+                {$push: {enrolledCourses: courseId}},
+                {new: true}
+               );
+               console.log('Enrolled Student:', enrolledStudent);
+
+               //send mail to the student for course enrollment
+               try {
+                   const emailSubject = `Welcome to ${enrolledCourse.courseName}!`;
+                   const emailBody = courseEnrollmentEmail(enrolledCourse.courseName, enrolledStudent.firstName);
+                   await mailSender(enrolledStudent.email, emailSubject, emailBody);
+                   console.log('Enrollment email sent successfully');
+               } catch (error) {
+                   console.error('Error sending enrollment email:', error);
+                   // Log error but don't fail the enrollment process
+               }
+            }
+            catch(error)
+            {
+                console.error('Error enrolling student:', error);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error enrolling student',
+                    error: error.message,
+                });
+            }
+        }
+        
     }
     catch(error)
     {
