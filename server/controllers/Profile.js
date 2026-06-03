@@ -15,7 +15,7 @@ exports.updateProfile = async(req , res) => {
                 message: 'Missing required fields',
             });
         }
-        //find profile 
+        //find profile ff
         const userDetails = await User.findById(id);
         const profileId = userDetails.additionalDetails;
         const profileDetails = await Profile.findById(profileId);
