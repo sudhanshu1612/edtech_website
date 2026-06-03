@@ -44,15 +44,17 @@ exports.createRating = async (req , res) => {
             user: userId,
          });
            //push the rating and review id into course model
-            courseDetails.ratingAndReviews.push(ratingReview._id);
-            await courseDetails.save();
+            const updatedCourseDetails = await Course.findByIdAndUpdate(
+                courseId,
+                {$push: { ratingAndReviews: ratingReview._id } },
+                {new: true}
+            );
             //return response
             return res.status(200).json({
                 success: true,
                 message: 'Rating and review created successfully',
                 ratingReview,
             });
-       //return response
     }
     catch(error)
     {
