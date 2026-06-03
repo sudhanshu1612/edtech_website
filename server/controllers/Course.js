@@ -1,6 +1,6 @@
 const Course = require("../model/Course");
 const Tag = require("../models/tags");
-const USer = require("../models/User");
+const User = require("../models/User");
 const {uploadImageToCloudinary} = require("../utils/imageUploader");
 
 //cretaeCourse handler
@@ -11,10 +11,10 @@ try
     const {courseName , courseDescription,whatYouWillLearn,price,tag} = req.body;
 
     //get thumbnail
-    const thumbnail = req.files.thumbnailImage;
+    const thumbnail = req.files?.thumbnailImage;
 
     //validation
-    if(!courseName || !courseDecription || !whatYouWillLearn || !price || !tag || !thumbnail)
+    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail)
     {
         return res.status(400).json({
             success: false,
@@ -25,7 +25,6 @@ try
     //check for instructor
     const UserId = req.user.id;
     const instructorDetails = await User.findById(UserId);
-    console.log(insturctorDetails);
 
     if(!instructorDetails)
     {
@@ -61,7 +60,7 @@ try
 
     //add the new course to the user schema of the insturctor
     await User.findByIdAndUpdate(
-          {_id: insturctorDetails._id},
+                    instructorDetails._id,
           {
             $push:
             {
@@ -114,4 +113,56 @@ exports.getAllCourse = async (req , res) => {
       })
     }
 }
+
+
+
+//print all the details of a particular course
+exports.getCourseDetails = async (req , res) => { 
+    try
+    {
+        //get id
+        const { courseId } = req.body;
+
+        //find course details
+        const courseDetails = await Course.findById(courseId)
+            .populate({
+                path: 'instructor',
+                populate: {
+                    path: 'additionalDetails',
+                },
+            })
+            .populate('category')
+            .populate('ratingAndReviews')
+            .populate({
+                path: 'courseContent',
+                populate: {
+                    path: 'subSection',
+                },
+            })
+            .exec();
+
+        if(!courseDetails)
+        {
+            return res.status(404).json({
+                success: false,
+                message: 'Course details not found with the given id',
+            });
+        }
+
+        //return response
+        return res.status(200).json({
+            success: true,
+            data: courseDetails,
+        });
+        
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: 'Could not fetch course details',
+            error: error.message,
+        });
+    }
+};
 
