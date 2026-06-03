@@ -65,5 +65,70 @@ exports.createRating = async (req , res) => {
         })
     }
 }
+
+
 //get avg rating 
+exports.getAverageRating = async (req ,res) => {
+    try
+    {
+        //get course id
+        const courseId = req.body.courseId;
+        //calculate avg rating for the course
+        const result = await RatingAndReview.aggregate([
+            { $match: { course: courseId } },
+            {
+                $group: {
+                    _id: null,
+                    averageRating: { $avg: "$rating" }
+                }
+            }
+        ]);
+
+        //return rating
+        return res.status(200).json({
+            success: true,
+            message: 'Average rating fetched successfully',
+            averageRating: result[0]?.averageRating || 0
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'cannot fetch average rating internal server error',
+        });
+    }
+}
+
+
 //get all rating
+exports.getAllRating = async (req , res) => {
+    try
+    {        //get course id
+        const courseId = req.body.courseId; 
+        //fetch all rating and review for the course
+        const courseDetails = await Course.findById(courseId)
+            .populate({
+                path: "ratingAndReviews",
+                populate: {
+                    path: "user",
+                    select: "firstName lastName email"
+                }
+            });
+        //return response
+        return res.status(200).json({
+            success: true,
+            message: 'All ratings fetched successfully',
+            ratings: courseDetails.ratingAndReviews
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'cannot fetch all ratings internal server error',
+        });
+    }
+}
