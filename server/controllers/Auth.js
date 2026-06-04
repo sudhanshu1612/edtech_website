@@ -273,7 +273,6 @@ exports.changePassword = async (req ,res) =>
         })
    }
    //validation
-   
    //upadate password in the data base
    //send mail - password upadated 
    //return response
