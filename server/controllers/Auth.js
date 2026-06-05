@@ -1,8 +1,11 @@
 const User = require("../models/User");
 const OTP = require("../models/OTP");
+const Profile = require("../models/Profile");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const mailSender = require("../utils/mailSender");
+const {otpEmail} = require("../mail/templates/otpEmail");
 require("dotenv").config();
 
 //sendOTP
@@ -25,7 +28,7 @@ require("dotenv").config();
         }
 
         //generate OTP
-        var OTP =  otpGenerator.generate(6, {
+        var otp =  otpGenerator.generate(6, {
             upperCaseAlphabets: false,
             lowerCaseAlphabets:false,
             specialChars:false, 
@@ -34,7 +37,7 @@ require("dotenv").config();
 
         //check unique otp or not 
 
-        const result = await OTP.findOne({otp : otp});
+        let result = await OTP.findOne({otp : otp});
 
         while (result) 
         {
@@ -43,7 +46,8 @@ require("dotenv").config();
             upperCaseAlphabets: false,
             lowerCaseAlphabets:false,
             specialChars:false,
-            })
+            });
+            result = await OTP.findOne({otp : otp});
         } 
 
         //create an otp object and create its entry at the database
@@ -54,6 +58,14 @@ require("dotenv").config();
 
         const otpBody =  await OTP.create(otpPayload);
         console.log(otpBody);
+
+        //send OTP via email
+        const emailResponse = await mailSender(
+            email,
+            "Verify your email address",
+            otpEmail(otp)
+        );
+        console.log("Email response: ", emailResponse);
 
         //return respomnse successful
         res.status(200).json({
@@ -126,7 +138,7 @@ exports.signUp = async (req , res) =>
                     message: "OTP not found",
                 })
             }
-            else if(otp != recentOtp)
+            else if(otp != recentOtp[0].otp)
             {
                 //invalid otp
                 return res.status(400).json({
@@ -138,7 +150,7 @@ exports.signUp = async (req , res) =>
             const hashedPassword = await bcrypt.hash(password , 10);
             //entry create in db
 
-            const profileDetails = await Profiler.create (
+            const profileDetails = await Profile.create(
             {
                 gender:null,
                 dateOfBirth: null,
@@ -146,7 +158,7 @@ exports.signUp = async (req , res) =>
                 contactNumber: null,
             });
 
-            const user = await user.create(
+            const newUser = await User.create(
             {
             firstName,
             lastName,
@@ -155,14 +167,14 @@ exports.signUp = async (req , res) =>
             password:hashedPassword,
             accountType,
             additionalDetails: profileDetails._id,
-            image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstname} ${lastName}`,
+            image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
             })
             //return res
             return res.status(200).json(
             {
                 success: true,
                 message:'User is registered successfully',
-                user,
+                user: newUser,
             });
         }
         catch(error)
@@ -215,7 +227,7 @@ exports.signUp = async (req , res) =>
                 {
                     email: user.email,
                     id: user._id,
-                    role: user.role,
+                    accountType: user.accountType,
                 }
                 const token = jwt.sign(payload , process.env.JWT_SECRET ,
                     {
@@ -261,19 +273,30 @@ exports.signUp = async (req , res) =>
 //change password
 exports.changePassword = async (req ,res) => 
 {
-   //get data from req body
-    const {oldPassword , newPassword , confirmNewPassword} = req.body;
-   //get oldpassword , new password , confirm new password
-   if( !oldPassword || !newPassword || !confirmNewPassword)
+   try
    {
-    return res.status(403).json(
+    //get data from req body
+    const {oldPassword , newPassword , confirmNewPassword} = req.body;
+    //get oldpassword , new password , confirm new password
+    if( !oldPassword || !newPassword || !confirmNewPassword)
+    {
+        return res.status(403).json(
         {
             success:false,
             message:'All fields are required',
         })
+    }
+    //validation
+    //upadate password in the data base
+    //send mail - password upadated 
+    //return response
    }
-   //validation
-   //upadate password in the data base
-   //send mail - password upadated 
-   //return response
+   catch(error)
+   {
+      console.log(error);
+      return res.status(500).json({
+         success: false,
+         message: 'Error while changing password',
+      });
+   }
 }

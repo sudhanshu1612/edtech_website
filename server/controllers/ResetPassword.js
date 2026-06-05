@@ -1,6 +1,7 @@
-const User = require("../models/USer");
+const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 //reset password token
 exports.resetPasswordToken = async (req , res) => 
@@ -31,6 +32,7 @@ exports.resetPasswordToken = async (req , res) =>
                                 {new:true}, //updated document will be returned in response with new:true
                             );
         //create url
+        console.log(token);
         const url = `http://localhost:3000/udate-password/${token}`
         //send mail containing the url
         await mailSender(email,"Password Reset Link",
@@ -90,7 +92,7 @@ exports.resetPassword = async (req , res) =>
         //hash the password
         const hashedPassword = await bcrypt.hash(password , 10 );
         //update the password
-        await user.findOneAndUpdate(
+        await User.findOneAndUpdate(
                 {token: token},
                 {password:hashedPassword},
                 {new:true},
@@ -98,7 +100,7 @@ exports.resetPassword = async (req , res) =>
         //return res
         return res.status(200).json({
             success: true,
-            message: 'Password reset unsuccessful',
+            message: 'Password reset successful',
         })
     }
     catch(error)

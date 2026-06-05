@@ -1,7 +1,7 @@
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();   //cloudinary is being required
 
-exports.cloudinaryConnnect = () => {
+exports.cloudinaryConnect = () => {
     try
     {
     //configuring the cloudinary to uplaod the media access

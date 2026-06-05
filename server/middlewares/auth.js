@@ -25,21 +25,21 @@ exports.auth = async ( req , res , next) =>
           const decode = jwt.verify(token , process.env.JWT_SECRET);
           console.log(decode);
           req.user = decode;
+          next();
        }
        catch(error)
        {
            //issue in verification
-           res.status(401).json(
+           return res.status(401).json(
             {
                 success: false,
                 message: 'Token is invalid',
             })
        }
-       next();
     }
     catch (error)
     {
-        res.status(401).json(
+        return res.status(401).json(
             {
                 success: false,
                 message: 'Something went wrong while validating the token',
@@ -63,15 +63,15 @@ exports.isStudent = async (req ,res , next) =>
    }
    catch(error)
    {
-      res.status(401).json(
+      return res.status(401).json(
         {
             success: false,
             message: 'User role cannot be verified',
         })
    }
 }
-//isinstructor
-exports.isinstructor = async (req ,res , next) =>
+//isInstructor
+exports.isInstructor = async (req ,res , next) =>
 {
    try
    {
@@ -87,7 +87,7 @@ exports.isinstructor = async (req ,res , next) =>
    }
    catch(error)
    {
-      res.status(401).json(
+      return res.status(401).json(
         {
             success: false,
             message: 'User role cannot be verified',
@@ -111,7 +111,7 @@ exports.isAdmin = async (req ,res , next) =>
    }
    catch(error)
    {
-      res.status(401).json(
+      return res.status(401).json(
         {
             success: false,
             message: 'User role cannot be verified',

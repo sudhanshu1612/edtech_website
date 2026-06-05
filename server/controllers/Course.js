@@ -1,5 +1,4 @@
-const Course = require("../model/Course");
-const Tag = require("../models/tags");
+const Course = require("../models/Course");
 const User = require("../models/User");
 const {uploadImageToCloudinary} = require("../utils/imageUploader");
 
@@ -8,13 +7,13 @@ exports.createCourse = async (req , res) => {
 try
 {
     //fetchData
-    const {courseName , courseDescription,whatYouWillLearn,price,tag} = req.body;
+    const {courseName , courseDescription,whatYouWillLearn,price} = req.body;
 
     //get thumbnail
     const thumbnail = req.files?.thumbnailImage;
 
     //validation
-    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail)
+    if(!courseName || !courseDescription || !whatYouWillLearn || !price || !thumbnail)
     {
         return res.status(400).json({
             success: false,
@@ -35,14 +34,15 @@ try
     }
 
     //check given tag is valid or not
-    const tagDetails = await Tag.findById(tag);
-    if(!tagDetails)
-    {
-        return res.status(404).json({
-            success: false,
-            message: 'Tag details not found',
-        });
-    }
+    // TODO: Tag model doesn't exist yet, uncomment when Tag model is created
+    // const tagDetails = await Tag.findById(tag);
+    // if(!tagDetails)
+    // {
+    //     return res.status(404).json({
+    //         success: false,
+    //         message: 'Tag details not found',
+    //     });
+    // }
 
     //upload image to cloudinary
     const thumbnailImage = await uploadImageToCloudinary(thumbnail,process.env.FOLDER_NAME);
@@ -54,7 +54,8 @@ try
         instructor: instructorDetails._id,
         whatYouWillLearn: whatYouWillLearn,
         price,
-        tag:tagDetails._id,
+        // TODO: tag field - uncomment when Tag model is created
+        // tag:tagDetails._id,
         thumbnail:thumbnailImage.secure_url,
     })
 
