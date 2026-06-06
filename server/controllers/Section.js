@@ -26,14 +26,14 @@ exports.createSection = async (req , res ) =>
                 courseContent: newSection._id,
             }
         },
-        {new:true},
+        {returnDocument: 'after'},
       )
       // hw use populate to replace sections sub sections both in the updated course details
       //response response
       return res.status(200).json({
         success: true,
         message: 'Section created successfully',
-        updatedCourseDetails,
+        updatedCourse,
       })
     }
     catch(error)
@@ -60,7 +60,7 @@ exports.updateSection = async (req , res) => {
         });
        }
        //update data
-       const section = await Section.findByIdAndUpdate(sectionId,{sectionName},{new:true});
+       const section = await Section.findByIdAndUpdate(sectionId,{sectionName},{returnDocument: 'after'});
        //return response
        return res.status(200).json({
         success: true,

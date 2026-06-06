@@ -11,7 +11,7 @@ exports.createSubSection = async (req , res) => {
          //data fetch
          const {sectionId , title , timeDuration , description } = req.body;
          //extract file or video
-         const video = req.files.video;
+         const video = req.files?.video || req.files?.videoFile;
          //data validation
          if(!sectionId || !title || !timeDuration || !description || !video)
          {
@@ -38,14 +38,14 @@ exports.createSubSection = async (req , res) => {
                     subSection: SubSectionDetails._id,
                 }   
             },
-            {new:true},
+            {returnDocument: 'after'},
          );
          //log update secgtion details after adding populate entry
          //return response
          return res.status(200).json({
             success: true,
             message: 'SubSection created successfully',
-            updatedSectionDetails,
+            updatedSection,
          })
     }
     catch(error)
@@ -79,7 +79,7 @@ exports.updateSubSection = async (req , res) => {
                     timeDuration: timeDuration,
                     description: description,
                 },
-                {new:true},
+                {returnDocument: 'after'},
             );  
             //return response
             return res.status(200).json({
