@@ -1,9 +1,14 @@
+import "./App.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Home from './pages/Home';
+
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-blue-600">
-        React + Tailwind CSS
-      </h1>
+    <div className="w-screen min-h-screen bg-richblack-900 font-inter">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
     </div>
   )
 }
