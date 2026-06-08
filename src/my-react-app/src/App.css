@@ -1,8 +1,4 @@
-@tailwind base;
-@tailwind utilities;
-@tailwind utilities;
-
-html ,body {
+html, body {
     overflow: hidden;
     font-family: 'Inter', sans-serif;
 }
