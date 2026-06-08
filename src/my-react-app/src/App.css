@@ -1,4 +1,4 @@
 html, body {
-    overflow: hidden;
+    scrollbar-width: none;
     font-family: 'Inter', sans-serif;
 }

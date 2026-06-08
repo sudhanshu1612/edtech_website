@@ -2,12 +2,13 @@ import React from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import CTAButton from '../components/Button';
+import Banner from '../asset/Asset/Image/banner.mp4';
 
 const Home = () => {
   return (
-    <div>
+    <div className=''>
       {/* section1 */}
-      <div className="pt-16 p-1 relative mx-auto flex flex-col w-11/12 items-center justify-between transition-all duration-200 rounded-lg gap-y-5">
+      <div className="pt-16 p-1 relative mx-auto flex flex-col w-11/12 items-center justify-between transition-all duration-200 rounded-lg gap-y-5 ">
 
         <Link to="/signup">
           <div className="mx-auto rounded-full bg-richblue-400 font-bold text-white transition-all duration-200 hover:scale-95 hover:bg-richblue-500 w-fit">
@@ -40,6 +41,15 @@ const Home = () => {
           <CTAButton active={true} Linkto="/book-demo">
             Book a Demo
           </CTAButton>
+        </div>
+
+        <div className="shadow-[0_0_80px_rgba(29,78,216,0.6)] w-7/12 my-10">
+          <video 
+          muted 
+          loop 
+          autoPlay>
+              <source src={Banner} type="video/mp4" />
+          </video>
         </div>
 
       </div>
