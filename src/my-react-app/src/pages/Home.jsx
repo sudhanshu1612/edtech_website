@@ -47,10 +47,16 @@ const Home = () => {
           <video 
           muted 
           loop 
-          autoPlay>
+          autoPlay
+          className='rounded-sm'>
               <source src={Banner} type="video/mp4" />
           </video>
         </div>
+
+         {/* code section 1 */}
+        {/* <div>
+            <CodeBlocks></CodeBlocks>
+        </div> */}
 
       </div>
 
