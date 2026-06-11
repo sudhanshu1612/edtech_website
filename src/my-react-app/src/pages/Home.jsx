@@ -3,6 +3,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import CTAButton from '../components/Button';
 import Banner from '../asset/Asset/Image/banner.mp4';
+import CodeBlocks from '../components/CodeBlocks';
 
 const Home = () => {
   return (
@@ -54,9 +55,49 @@ const Home = () => {
         </div>
 
          {/* code section 1 */}
-        {/* <div>
-            <CodeBlocks></CodeBlocks>
-        </div> */}
+        <div>
+            <CodeBlocks 
+              position= {"flex-row"} 
+              heading={
+                          <div className='text-4xl font-semibold'>
+                            unlock your ccoding potential with our online courses
+                          </div>
+                      } 
+              subheading ={
+                             "Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
+                          }
+              ctabtn1={
+                         {
+                            btnText:"try it yourself",
+                            linkto: "/signup",
+                            active: true,
+                         }
+                      }
+              ctabtn2={
+                         {
+                            btnText:"learn more",
+                            linkto: "/login",
+                            active: false,
+                         }
+                      }
+              codeblock={
+                           `<!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Document</title>
+                            </head>
+                            <body>
+
+                                <h1>Hello World</h1>
+                                <p>This is a paragraph.</p>
+
+                            </body>
+                            </html>`
+                        }
+            ></CodeBlocks>
+        </div>
 
       </div>
 
