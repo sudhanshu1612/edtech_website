@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import CTAButton from '../components/Button';
 import Banner from '../asset/Asset/Image/banner.mp4';
 import CodeBlocks from '../components/CodeBlocks';
+import HighlightText from '../components/HighlightText';
 
 const Home = () => {
   return (
@@ -59,8 +60,8 @@ const Home = () => {
             <CodeBlocks 
               position= {"flex-row"} 
               heading={
-                          <div className='text-4xl font-semibold'>
-                            unlock your ccoding potential with our online courses
+                          <div className='text-4xl text-white font-semibold'>
+                            unlock your <HighlightText text={" coding potential "}></HighlightText> with our online courses
                           </div>
                       } 
               subheading ={
@@ -98,9 +99,52 @@ const Home = () => {
                         }
             ></CodeBlocks>
         </div>
+        {/* code section 2 */}
+        <div>
+            <CodeBlocks 
+              position= {"flex flex-row-reverse"} 
+              heading={
+                          <div className='text-4xl text-white font-semibold'>
+                            Start   
+                            <HighlightText text={"   coding in seconds"}></HighlightText>
+                          </div>
+                      } 
+              subheading ={
+                             "Go ahead, give it a try. Our hands-on learning environment means you'll be writing real code from your very first lesson."
+                          }
+              ctabtn1={
+                         {
+                            btnText:"continue Lesson",
+                            linkto: "/signup",
+                            active: true,
+                         }
+                      }
+              ctabtn2={
+                         {
+                            btnText:"learn more",
+                            linkto: "/login",
+                            active: false,
+                         }
+                      }
+              codeblock={
+                           `<!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Document</title>
+                            </head>
+                            <body>
 
+                                <h1>Hello World</h1>
+                                <p>This is a paragraph.</p>
+
+                            </body>
+                            </html>`
+                        }
+            ></CodeBlocks>
+        </div>
       </div>
-
       {/* section2 */}
 
       {/* section3 */}
