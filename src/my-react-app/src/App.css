@@ -2,3 +2,6 @@ html, body {
     scrollbar-width: none;
     font-family: 'Inter', sans-serif;
 }
+.homepage_bg{
+    background: url("../src/asset/Asset/Image/bghome.svg");
+}

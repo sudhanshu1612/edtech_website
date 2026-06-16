@@ -27,7 +27,15 @@ const CodeBlocks = ({position, heading , subheading , ctabtn1 , ctabtn2, codeblo
           </div>
 
           {/* {section2} */}
-          <div className="w-1/2 flex p-4">
+          <div className="w-1/2 flex p-4 
+             bg-slate-900/30
+              backdrop-blur-2xl
+              border border-white/10
+              rounded-2xl
+              shadow-2xl
+              shadow-blue-500/10
+              bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.15),transparent_35%),radial-gradient(circle_at_right,rgba(59,130,246,0.12),transparent_30%)]
+             ">
           <div className='text-richblack-300 text-center flex-col w-[10%] font-inter font-bold'>
             {/* bg has gradient create it */}
             <p>1</p>
@@ -42,7 +50,7 @@ const CodeBlocks = ({position, heading , subheading , ctabtn1 , ctabtn2, codeblo
             <p>10</p>
             <p>11</p>
           </div>
-          <div className={`w-[90%] flex flex-col font-bold font-mono   pr-2 text-yellow-200`}>
+          <div className={`w-[90%] flex flex-col font-bold font-mono   pr-2 text-yellow-200 `}>
                <div>
                 <TypeAnimation
                   sequence={[
