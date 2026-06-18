@@ -10,6 +10,8 @@ import HighlightText from '../components/HighlightText';
  import InstructorSection from '../components/InstructorSection';
  import Footer from '../components/common/Footer';
 
+
+
 const Home = () => {
   return (
     <div>
@@ -198,13 +200,16 @@ const Home = () => {
       <div className='w-11/12 mx-auto max-w-maxContent flex-col justify-between bg-richblack-900 text-white'>
 
            <InstructorSection></InstructorSection>
+           
 
            <h2 className='text-center text-4xl font-semibold mt-10'>
             Review from Other Learners
            </h2>
       </div>
+      
 
       {/* footer */}
+     
       <Footer></Footer>
     </div>
   );
